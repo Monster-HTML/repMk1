@@ -1,0 +1,64 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+int main() {
+    // Имя файла для записи предложений
+    const string filename = "sentences.txt";
+
+    // Запись предложений в файл
+    ofstream outFile(filename);
+    if (!outFile) {
+        cerr << "Ошибка открытия файла для записи." << endl;
+        return 1; // Завершение программы с ошибкой
+    }
+
+    cout << "Введите предложения (введите 'exit' для завершения ввода):" << endl;
+
+    string sentence;
+    while (true) {
+        getline(cin, sentence);
+        if (sentence == "exit") {
+            break; // Завершение ввода
+        }
+        outFile << sentence << endl; // Запись предложения в файл
+    }
+
+    // Закрытие файла
+    outFile.close();
+
+    // Чтение предложений из файла
+    ifstream inFile(filename);
+    if (!inFile) {
+        cerr << "Ошибка открытия файла для чтения." << endl;
+        return 1; // Завершение программы с ошибкой
+    }
+
+    vector<string> sentences;
+    while (getline(inFile, sentence)) {
+        sentences.push_back(sentence); // Добавление предложений в вектор
+    }
+
+    // Закрытие файла
+    inFile.close();
+
+    // Проверка, были ли записаны предложения
+    if (sentences.empty()) {
+        cout << "Нет предложений для отображения." << endl;
+        return 0;
+    }
+
+    // Инициализация генератора случайных чисел
+    srand(static_cast<unsigned int>(time(0))); 
+    int randomIndex = rand() % sentences.size(); // Генерация случайного индекса
+
+    // Вывод случайного предложения
+    cout << "Случайное предложение: " << sentences[randomIndex] << endl;
+
+    return 0;
+}
